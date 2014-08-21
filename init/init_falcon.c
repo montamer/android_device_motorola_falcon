@@ -60,7 +60,7 @@ void init_msm_properties(unsigned long msm_id, unsigned long msm_ver, char *boar
     fp = popen("/system/bin/ls -la /fsg/falcon_3.img.gz | /system/xbin/cut -d '_' -f3", "r");
     fgets(cdma_variant, sizeof(cdma_variant), fp);
     pclose(fp);
-    fp = popen("/system/bin/blkid /dev/block/platform/msm_sdcc.1/by-name/userdata | /system/xbin/cut -d ' ' -f3", "r");
+    fp = popen("/system/bin/blkid /dev/block/platform/msm_sdcc.1/by-name/userdata | /system/xbin/cut -d ' ' -f3 | /system/xbin/cut -d '\"' -f2", "r");
     fgets(fstype, sizeof(fstype), fp);
     pclose(fp);
     if (strstr(fstype, "ext4")) {
@@ -72,7 +72,7 @@ void init_msm_properties(unsigned long msm_id, unsigned long msm_ver, char *boar
         property_set("ro.mot.build.customerid", "retusa_glb");
         property_set("ro.telephony.default_network", "0");
         property_set("persist.radio.multisim.config", "");
-    } else if (ISMATCH(radio, "0x1")) {
+    } else if (ISMATCH(radio, "0x1") || ISMATCH(radio, "0x5")) {
         /* xt1032 */
         property_set("ro.product.device", "falcon_umts");
         property_set("ro.product.model", "Moto G");
